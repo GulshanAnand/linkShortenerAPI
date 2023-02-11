@@ -1,6 +1,5 @@
-# Using flask to make an api
-# import necessary libraries and functions
 from flask import Flask, jsonify, request, redirect
+from flask_restful import Resource, Api
 import mysql.connector as sql
 
 db = sql.connect(
@@ -9,10 +8,6 @@ db = sql.connect(
   password = "cuttly",
   database = "link"
 )
-
-  
-# creating a Flask app
-app = Flask(__name__)
 
 def nextWord(s):
     if (s == " "):
@@ -26,29 +21,26 @@ def nextWord(s):
         s = s.replace(s[i], chr(ord(s[i]) + 1), 1)
     return s
 
-@app.route('/', methods = ['GET', 'POST'])
-def home():
-    if(request.method == 'GET'):
-        data = "hello world"
-        return jsonify({'data': data})
-        
-@app.route('/shorten/<string:link>')
-def shorten(link):
-    cursor = db.cursor(dictionary = True)
-    cursor.execute("SELECT MAX(shortURL) as shortURL FROM urls")
-    row = cursor.fetchone()
-    shortURL = row['shortURL']
-    shortURL = nextWord(shortURL)
-    cursor.execute("INSERT INTO urls VALUES(%s, %s)", (link, shortURL,))
-    db.commit()
-    return jsonify({'status':shortURL})
+app = Flask(__name__)
+api = Api(app)
 
-@app.route('/test')
-def test():
-    murl = request.args.get('link')
-    code = request.args.get('code')
-    return jsonify({'data': murl, 'code': code})
+class HelloWorld(Resource):
+    def get(self):
+        return {'hello': 'world'}
 
-# driver function
+class shorten(Resource):
+    def get(self, link):
+        cursor = db.cursor(dictionary = True)
+        cursor.execute("SELECT MAX(shortURL) as shortURL FROM urls")
+        row = cursor.fetchone()
+        shortURL = row['shortURL']
+        shortURL = nextWord(shortURL)
+        cursor.execute("INSERT INTO urls VALUES(%s, %s)", (link, shortURL,))
+        db.commit()
+        return jsonify({'status':shortURL})
+
+api.add_resource(HelloWorld, '/')
+api.add_resource(shorten, '/shorten/<string:link>')
+
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)

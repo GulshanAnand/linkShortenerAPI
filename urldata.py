@@ -16,8 +16,7 @@ def getNextWord(s):
     return ''.join(chars)
 
 class urldata:
-    def __init__(self, url):
-        self.url = url
+    def __init__(self):
         self.db = sql.connect(
             host = "localhost",
             user = "linkadmin",
@@ -25,12 +24,22 @@ class urldata:
             database = "link"
         )
 
-    def shorten(self):
+    def shorten(self, url):
         cursor = self.db.cursor(dictionary = True)
         cursor.execute("SELECT MAX(shortURL) as shortURL FROM urls")
         row = cursor.fetchone()
         shortURL = row['shortURL']
         shortURL = getNextWord(shortURL)
-        cursor.execute("INSERT INTO urls VALUES(%s, %s)", (self.url, shortURL,))
+        cursor.execute("INSERT INTO urls VALUES(%s, %s)", (url, shortURL,))
         self.db.commit()
         self.shortURL = shortURL
+
+    def getURL(self, code):
+        cursor = self.db.cursor(dictionary = True)
+        cursor.execute("SELECT originalURL from urls WHERE shortURL=%s", (code,))
+        row = cursor.fetchone()
+        if not row:
+            self.originalURL = None
+        else:
+            originalURL = row['originalURL']
+            self.originalURL = originalURL

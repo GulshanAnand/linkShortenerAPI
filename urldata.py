@@ -1,5 +1,7 @@
 from flask import Flask, jsonify
 import mysql.connector as sql
+import random, string
+
 
 def getNextWord(s):
     chars = list(s)
@@ -15,6 +17,14 @@ def getNextWord(s):
     chars[i+1:] = ['a'] * (len(chars) - i - 1)
     return ''.join(chars)
 
+
+def generate():
+    length = 6
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choices(characters, k=length))
+    return random_string
+
+
 class urldata:
     def __init__(self):
         self.db = sql.connect(
@@ -24,15 +34,28 @@ class urldata:
             database = "link"
         )
 
+
     def shorten(self, url):
         cursor = self.db.cursor(dictionary = True)
-        cursor.execute("SELECT MAX(shortURL) as shortURL FROM urls")
-        row = cursor.fetchone()
-        shortURL = row['shortURL']
-        shortURL = getNextWord(shortURL)
+        # cursor.execute("SELECT MAX(shortURL) as shortURL FROM urls")
+        # row = cursor.fetchone()
+        # shortURL = row['shortURL']
+        # shortURL = getNextWord(shortURL)
+
+        shortURL = generate()
+
+        while True:
+            cursor.execute("SELECT shortURL FROM urls WHERE shortURL=%s", (shortURL,))
+            row = cursor.fetchone()
+            if not row:
+                break
+            else:
+                shortURL = generate()
+
         cursor.execute("INSERT INTO urls VALUES(%s, %s)", (url, shortURL,))
         self.db.commit()
         self.shortURL = shortURL
+
 
     def getURL(self, code):
         cursor = self.db.cursor(dictionary = True)

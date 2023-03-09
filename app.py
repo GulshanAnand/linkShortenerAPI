@@ -16,6 +16,7 @@ class shorten(Resource):
 
     def post(self):
         link = request.form.get('url')
+        alias = request.form.get('alias')
         ob = urldata()
         ob.shorten(link)
         return jsonify({'status' : ob.shortURL})

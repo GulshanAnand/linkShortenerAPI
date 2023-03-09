@@ -2,11 +2,17 @@ from flask import jsonify
 
 """
 
+incoming data format:
+{
+    'url': 'https://www.python.org',
+    'alias' : 'coke'
+}
+
+
 1) 404
 {
     'status': 1,
-    'fullLink': 'https://www.google.com',
-    'message': 'Error 404'
+    'message': '404 Page not found'
 }
 
 2) good response
@@ -32,10 +38,24 @@ from flask import jsonify
     'message': 'Alias already taken'
 }
 
+5) Invalid alias
+{
+    'status': 5,
+    'fullLink': 'https://www.google.com',
+    'message': 'Alias contains invalid characters'
+}
 
 """
 
 baseUrl = ""
+
+def pageNotFound():
+    res = jsonify({
+        'status': 1,
+        'message': '404 Page not found'
+    })
+    return res
+
 
 def responseOk(ob):
     shortLink = baseUrl + ob.shortURL
@@ -56,10 +76,20 @@ def responseInvalidURL(ob):
     })
     return res
 
+
 def responseAliasTaken(ob):
     res = jsonify({
         'status': 4,
         'fullLink': ob.originalURL,
         'message': 'Alias already taken'
+    })
+    return res
+
+
+def responseInvalidAlias(ob):
+    res = jsonify({
+        'status': 5,
+        'fullLink': ob.originalURL,
+        'message': 'Alias contains invalid characters'
     })
     return res

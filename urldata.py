@@ -1,14 +1,6 @@
 from flask import Flask, jsonify
 import mysql.connector as sql
-import random, string
-
-
-def generate():
-    length = 6
-    characters = string.ascii_letters + string.digits
-    random_string = ''.join(random.choices(characters, k=length))
-    return random_string
-
+import random, string, validators
 
 class urldata:
     originalURL = None
@@ -22,9 +14,37 @@ class urldata:
         )
 
 
+    def generate(self):
+        length = 6
+        characters = string.ascii_letters + string.digits
+        random_string = ''.join(random.choices(characters, k=length))
+        return random_string
+
+
+    def validate(self, url):
+        if validators.url(url):
+            return True
+        else:
+            return False
+
+
+    def validateAlias(self, alias):
+        return alias.isalnum()
+
+    
+    def checkAlias(self, alias):
+        cursor = self.db.cursor(dictionary = True)
+        cursor.execute("SELECT shortURL FROM urls WHERE shortURL=%s", (alias,))
+        row = cursor.fetchone()
+        if not row:
+            return True
+        else:
+            return False
+
+
     def shorten(self, url):
         cursor = self.db.cursor(dictionary = True)
-        shortURL = generate()
+        shortURL = self.generate()
 
         while True:
             cursor.execute("SELECT shortURL FROM urls WHERE shortURL=%s", (shortURL,))
@@ -32,12 +52,18 @@ class urldata:
             if not row:
                 break
             else:
-                shortURL = generate()
+                shortURL = self.generate()
 
         cursor.execute("INSERT INTO urls VALUES(%s, %s)", (url, shortURL,))
         self.db.commit()
         self.shortURL = shortURL
-        self.originalURL = url
+
+
+    def shortenWithAlias(self, url, alias):
+        cursor = self.db.cursor(dictionary = True)
+        cursor.execute("INSERT INTO urls VALUES(%s, %s)", (url, alias,))
+        self.db.commit()
+        self.shortURL = alias
 
 
     def getURL(self, alias):

@@ -17,6 +17,19 @@ class shorten(Resource):
         link = data.get('url')
         alias = data.get('alias')
         ob = urldata()
+        ob.originalURL = link
+        
+        if not ob.validate(link):
+            return responseInvalidURL(ob)
+        if alias:
+            if not ob.validateAlias(alias):
+                return responseInvalidAlias(ob)
+            if ob.checkAlias(alias):
+                ob.shortenWithAlias(link, alias)
+                return responseOk(ob)
+            else:
+                return responseAliasTaken(ob)
+
         ob.shorten(link)
         return responseOk(ob)
 
@@ -25,7 +38,7 @@ class home(Resource):
         ob = urldata()
         ob.getURL(alias)
         if not ob.originalURL:
-            return jsonify({'link' : ob.originalURL})
+            return pageNotFound()
         else:
             return redirect(ob.originalURL)
         

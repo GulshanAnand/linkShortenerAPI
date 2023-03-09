@@ -6,7 +6,7 @@ BASE = "http://127.0.0.1:5000/"
 
 # print(response.content)
 
-json_data = {'url': 'https://www.python.org', 'alias' : 'coke'}
+json_data = {'url': 'https://www.python.org', 'alias' : 'ok'}
 
 headers = {'Content-Type': 'application/json'}
 

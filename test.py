@@ -6,11 +6,11 @@ BASE = "http://127.0.0.1:5000/"
 
 # print(response.content)
 
-form_data = {'url': 'https://www.bing.com', 'alias' : 'coke'}
+json_data = {'url': 'https://www.python.org', 'alias' : 'coke'}
 
 headers = {'Content-Type': 'application/json'}
 
-server = requests.post(BASE + "shorten", data=form_data)
+server = requests.post(BASE + "shorten", json=json_data, headers=headers)
 output = server.text
 
 print(output)

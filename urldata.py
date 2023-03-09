@@ -3,21 +3,6 @@ import mysql.connector as sql
 import random, string
 
 
-def getNextWord(s):
-    chars = list(s)
-    i = len(chars) - 1
-    while i >= 0 and chars[i] == 'z':
-        i -= 1
-    if i < 0:
-        a = "a"
-        for i in range(0, len(s)):
-            a += 'a'
-        return a
-    chars[i] = chr(ord(chars[i]) + 1)
-    chars[i+1:] = ['a'] * (len(chars) - i - 1)
-    return ''.join(chars)
-
-
 def generate():
     length = 6
     characters = string.ascii_letters + string.digits
@@ -26,6 +11,8 @@ def generate():
 
 
 class urldata:
+    originalURL = None
+    shortURL = None
     def __init__(self):
         self.db = sql.connect(
             host = "localhost",
@@ -37,11 +24,6 @@ class urldata:
 
     def shorten(self, url):
         cursor = self.db.cursor(dictionary = True)
-        # cursor.execute("SELECT MAX(shortURL) as shortURL FROM urls")
-        # row = cursor.fetchone()
-        # shortURL = row['shortURL']
-        # shortURL = getNextWord(shortURL)
-
         shortURL = generate()
 
         while True:
@@ -55,14 +37,16 @@ class urldata:
         cursor.execute("INSERT INTO urls VALUES(%s, %s)", (url, shortURL,))
         self.db.commit()
         self.shortURL = shortURL
+        self.originalURL = url
 
 
-    def getURL(self, code):
+    def getURL(self, alias):
         cursor = self.db.cursor(dictionary = True)
-        cursor.execute("SELECT originalURL from urls WHERE shortURL=%s", (code,))
+        cursor.execute("SELECT originalURL from urls WHERE shortURL=%s", (alias,))
         row = cursor.fetchone()
         if not row:
             self.originalURL = None
         else:
             originalURL = row['originalURL']
             self.originalURL = originalURL
+            self.shortURL = alias

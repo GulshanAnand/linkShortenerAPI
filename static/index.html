@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>URL Shortener</title>
 </head>
-
 <body>
+    <h3>URL Shortener</h3>
     <form id="form" method="post">
-        <input type="text" , id="url" placeholder="Enter your URL" required/></br>
-        <input type="text" , id="alias" placeholder="Alias" /></br>
-        <input type="submit" value="Shorten"/>
+        <input type="text" , id="url" placeholder="Enter your URL" required />
+        <input type="submit" value="Shorten" /><br>
+        <input type="text" , id="alias" placeholder="Alias" /></br><br>
     </form>
     <div>
-        <h3>Shortened URL</h3>
-        <h4 id="shortURL"></h4>
+        <input type="text" , id="shortURL" readonly/>
+        <button onclick="myFunction()">Copy text</button>
     </div>
 </body>
 <script>
     var form = document.getElementById('form')
-
     form.addEventListener('submit', function (e) {
         e.preventDefault()
-
         var url = document.getElementById('url').value
         var alias = document.getElementById('alias').value
 
@@ -28,7 +27,6 @@
             body: JSON.stringify({
                 url: url,
                 alias: alias,
-
             }),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
@@ -40,12 +38,19 @@
             .then(function (data) {
                 console.log(data)
                 shortURL = document.getElementById("shortURL")
-                if(data.status != 2){
-                    shortURL.innerHTML = "Something wrong with data"
+                if (data.status != 2) {
+                    shortURL.value = "Something wrong with data"
                 }
-                else shortURL.innerHTML = data.shortLink
+                else shortURL.value = data.shortLink
             }).catch(error => console.error('Error:', error));
     });
-</script>
 
+    function myFunction() {
+        var copyText = document.getElementById("shortURL");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+    }
+
+</script>
 </html>

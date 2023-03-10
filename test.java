@@ -1,44 +1,49 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class test {
+
     public static void main(String[] args) throws IOException {
+
+        // Create a new URL object
         URL url = new URL("http://localhost:5000/shorten");
+
+        // Open a connection to the URL
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Set the request method to POST
         connection.setRequestMethod("POST");
+
+        // Set the content type to JSON
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        // Enable output for the connection
         connection.setDoOutput(true);
 
-        Map<String, String> formFields = new HashMap<>();
-        formFields.put("url", "https://www.github.com");
+        // Create a JSON payload
+        String jsonPayload = "{\"url\":\"https://www.python.org\",\"alias\":\"j\"}";
 
-        StringBuilder postData = new StringBuilder();
-        for (Map.Entry<String, String> param : formFields.entrySet()) {
-            if (postData.length() != 0) {
-                postData.append('&');
-            }
-            postData.append(param.getKey());
-            postData.append('=');
-            postData.append(param.getValue());
+        // Write the JSON payload to the connection's output stream
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(jsonPayload.getBytes());
+        outputStream.flush();
+        outputStream.close();
+
+        // Read the response from the server
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String line;
+        StringBuilder responseBuilder = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            responseBuilder.append(line);
         }
+        reader.close();
 
-        byte[] postDataBytes = postData.toString().getBytes("UTF-8");
-        connection.getOutputStream().write(postDataBytes);
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        System.out.println("Response status code: " + connection.getResponseCode());
-        System.out.println("Response body: " + response.toString());
+        // Print the response from the server
+        String response = responseBuilder.toString();
+        System.out.println(response);
     }
 }

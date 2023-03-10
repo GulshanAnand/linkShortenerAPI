@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+    <form id="form" method="post">
+        <input type="text" , id="url" placeholder="Enter your URL" required/></br>
+        <input type="text" , id="alias" placeholder="Alias" /></br>
+        <input type="submit" value="Shorten"/>
+    </form>
+    <div>
+        <h3>Shortened URL</h3>
+        <h4 id="shortURL"></h4>
+    </div>
+</body>
+<script>
+    var form = document.getElementById('form')
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault()
+
+        var url = document.getElementById('url').value
+        var alias = document.getElementById('alias').value
+
+        fetch('http://127.0.0.1:5000/shorten', {
+            method: 'POST',
+            body: JSON.stringify({
+                url: url,
+                alias: alias,
+
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            }
+        })
+            .then(function (response) {
+                return response.json()
+            })
+            .then(function (data) {
+                console.log(data)
+                shortURL = document.getElementById("shortURL")
+                if(data.status != 2){
+                    shortURL.innerHTML = "Something wrong with data"
+                }
+                else shortURL.innerHTML = data.shortLink
+            }).catch(error => console.error('Error:', error));
+    });
+</script>
+
+</html>

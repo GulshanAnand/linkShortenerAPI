@@ -1,12 +1,12 @@
 import requests
 
-BASE = "http://127.0.0.1:5000/"
+BASE = "https://labwired.tech/"
 
 # response = requests.get(BASE + "shorten")
 
 # print(response.content)
 
-json_data = {'url': 'https://www.python.org', 'alias' : 'ok1'}
+json_data = {'url': 'https://www.python.org', 'alias' : 'python'}
 
 headers = {'Content-Type': 'application/json'}
 

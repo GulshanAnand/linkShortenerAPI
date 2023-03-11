@@ -47,7 +47,7 @@ incoming data format:
 
 """
 
-baseUrl = ""
+baseUrl = "https://labwired.tech/"
 
 def pageNotFound():
     res = jsonify({

@@ -7,7 +7,7 @@ class urldata:
     shortURL = None
     def __init__(self):
         self.db = sql.connect(
-            host = "localhost",
+            host = "10.0.2.15",
             user = "linkadmin",
             password = "cuttly",
             database = "link"

@@ -22,7 +22,7 @@
         var url = document.getElementById('url').value
         var alias = document.getElementById('alias').value
 
-        fetch('http://127.0.0.1:5000/shorten', {
+        fetch('https://labwired.tech/shorten', {
             method: 'POST',
             body: JSON.stringify({
                 url: url,

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, request, redirect, render_template, make_response
 from flask_restful import Resource, Api
 from flask_cors import CORS
 import json
@@ -11,7 +11,8 @@ api = Api(app)
 
 class home(Resource):
     def get(self):
-        return {'hello': 'world'}
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("index.html"), 200, headers)
 
 class shorten(Resource):
     def post(self):

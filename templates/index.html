@@ -8,7 +8,7 @@
     <form id="form" method="post">
         <input type="text" , id="url" placeholder="Enter your URL" required />
         <input type="submit" value="Shorten" /><br>
-        <input type="text" , id="alias" placeholder="Alias" /></br><br>
+        <input type="text" , id="alias" placeholder="Alias(Optional)" /></br><br>
     </form>
     <div>
         <input type="text" , id="shortURL" readonly/>
@@ -39,7 +39,7 @@
                 console.log(data)
                 shortURL = document.getElementById("shortURL")
                 if (data.status != 2) {
-                    shortURL.value = "Something wrong with data"
+                    shortURL.value = data.message
                 }
                 else shortURL.value = data.shortLink
             }).catch(error => console.error('Error:', error));

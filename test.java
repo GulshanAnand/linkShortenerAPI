@@ -10,7 +10,7 @@ public class test {
     public static void main(String[] args) throws IOException {
 
         // Create a new URL object
-        URL url = new URL("http://localhost:5000/shorten");
+        URL url = new URL("https://labwired.tech/shorten");
 
         // Open a connection to the URL
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

@@ -1,4 +1,4 @@
-const url = "http://127.0.0.1:5000/shorten";
+const url = "https://labwired.tech/shorten";
 const data = {
   url: "https://www.python.org",
   alias: "hello"

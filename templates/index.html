@@ -2,16 +2,48 @@
 <html>
 <head>
     <title>URL Shortener</title>
+    <style>
+        input {
+            font-size: large;
+            width: 31%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid;
+            border-color: rgb(141, 141, 141);
+        }
+        div {
+            text-align: center;
+        }
+        #shortURL {
+            width: 25%;
+        }
+        button {
+            font-size: large;
+            background-color: rgb(4, 160, 4);
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            color: azure;
+            font-weight: bold;
+        }
+        body {
+            margin-top: 80px;
+        }
+    </style>
 </head>
 <body>
-    <h3>URL Shortener</h3>
-    <form id="form" method="post">
-        <input type="text" , id="url" placeholder="Enter your URL" required />
-        <input type="submit" value="Shorten" /><br>
-        <input type="text" , id="alias" placeholder="Alias" /></br><br>
-    </form>
+    <h2 style="text-align: center;">URL Shortener</h2><br>
     <div>
-        <input type="text" , id="shortURL" readonly/>
+        <form id="form" method="post">
+            <div>
+                <input type="text", id="url" placeholder="Enter your URL" required /><br><br>
+                <input type="text", id="alias" placeholder="Alias (Optional)"/></br><br>
+            </div>
+            <button type="submit">Shorten</button><br><br><br>
+        </form>
+    </div>
+    <div>
+        <input type="text", id="shortURL" readonly/>
         <button onclick="myFunction()">Copy text</button>
     </div>
 </body>
@@ -22,7 +54,7 @@
         var url = document.getElementById('url').value
         var alias = document.getElementById('alias').value
 
-        fetch('https://labwired.tech/shorten', {
+        fetch('http://127.0.0.1:5000/shorten', {
             method: 'POST',
             body: JSON.stringify({
                 url: url,

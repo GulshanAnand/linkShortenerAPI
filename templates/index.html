@@ -4,47 +4,62 @@
     <title>URL Shortener</title>
     <style>
         input {
-            font-size: large;
-            width: 31%;
-            padding: 15px;
-            border-radius: 10px;
+            width: 30vw;
+            font-size: medium;
+            padding: 10px;
+            border-radius: 8px;
             border: 2px solid;
             border-color: rgb(141, 141, 141);
+            margin: 2px;
+        }
+        button {
+            width: 100px;
+            font-size: medium;
+            background-color: rgb(4, 160, 4);
+            border: solid;
+            border-color: rgb(4, 160, 4);
+            border-radius: 8px;
+            padding: 10px;
+            color: azure;
+            font-weight: bold;
+        }
+        #alias {
+            margin-right: 105px;
+        }
+        #outdiv {
+            margin: 50px;
         }
         div {
             text-align: center;
         }
-        #shortURL {
-            width: 25%;
-        }
-        button {
-            font-size: large;
-            background-color: rgb(4, 160, 4);
-            border: none;
-            border-radius: 10px;
-            padding: 15px;
-            color: azure;
-            font-weight: bold;
-        }
-        body {
-            margin-top: 80px;
+        h1 {
+            text-align: center;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
     </style>
 </head>
 <body>
-    <h2 style="text-align: center;">URL Shortener</h2><br>
+    <header>
+        <br></br>
+        <h1>URL Shortener</h1>
+        <br></br>
+    </header>
+
     <div>
-        <form id="form" method="post">
-            <div>
-                <input type="text", id="url" placeholder="Enter your URL" required /><br><br>
-                <input type="text", id="alias" placeholder="Alias (Optional)"/></br><br>
-            </div>
-            <button type="submit">Shorten</button><br><br><br>
-        </form>
-    </div>
-    <div>
-        <input type="text", id="shortURL" readonly/>
-        <button onclick="myFunction()">Copy text</button>
+        <br></br>
+        <div>
+            <form id="form" method="post">
+                <input id="url" type="text" placeholder='Enter your URL' required/>
+                <button type="submit">Shorten</button>
+            </form>
+            <br></br>
+            <input id="alias" type="text" placeholder='Alias (Optional)'/>
+        </div>
+        <br></br>
+        <div id="outdiv">
+            <input type="text" id="shortURL" readonly/>
+            <button onclick="myFunction()">Copy</button>
+        </div>
     </div>
 </body>
 <script>

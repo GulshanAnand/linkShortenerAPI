@@ -1,4 +1,4 @@
-#!/home/gulshan/linkShortener/venv/bin/python
+#!/home/gulshan/linkShortenerAPI/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
